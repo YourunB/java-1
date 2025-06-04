@@ -1,7 +1,6 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,10 +97,22 @@ public class FormCoordinates {
     drawButton.setBounds(10, 300, 500, 25);
     frame.add(drawButton);
 
-    JTextArea drawArea = new JTextArea();
-    JScrollPane drawScroll = new JScrollPane(drawArea);
-    drawScroll.setBounds(10, 340, 500, 150);
-    frame.add(drawScroll);
+    JPanel drawArea = new JPanel() {
+      @Override
+      protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.setColor(Color.BLUE);
+        for (Segment s : segments) {
+          g.drawLine(s.x1, s.y1, s.x2, s.y2);
+        }
+        g.setColor(Color.RED);
+        g.drawRect(Math.min(rectX1, rectX2), Math.min(rectY1, rectY2),
+            Math.abs(rectX2 - rectX1), Math.abs(rectY2 - rectY1));
+      }
+    };
+    drawArea.setBackground(Color.WHITE);
+    drawArea.setBounds(10, 340, 500, 150);
+    frame.add(drawArea);
 
     JButton intersectButton = new JButton("Отобразить координаты отрезков, пересекающих прямоугольную область");
     intersectButton.setBounds(10, 500, 500, 25);
@@ -109,6 +120,7 @@ public class FormCoordinates {
 
     JTextArea resultArea = new JTextArea();
     resultArea.setBounds(200, 540, 200, 100);
+    resultArea.setEditable(false);
     frame.add(resultArea);
 
     JPanel canvasPanel = new JPanel() {
@@ -163,12 +175,21 @@ public class FormCoordinates {
 
     intersectButton.addActionListener(e -> {
       StringBuilder result = new StringBuilder();
+      ArrayList<Segment> intersectedSegments = new ArrayList<>();
+      tableModel.setRowCount(0); // Очищаем таблицу
+
       for (Segment s : segments) {
-        if (segmentIntersectsRect(s)) {
+        if (segmentIntersectsRect(s)) { // Проверяем пересечение
+          intersectedSegments.add(s);
           result.append(String.format("(%d, %d)-(%d, %d)\n", s.x1, s.y1, s.x2, s.y2));
+          tableModel.addRow(new Object[]{s.x1, s.y1, s.x2, s.y2});
         }
       }
+
       resultArea.setText(result.toString());
+      segments.clear();
+      segments.addAll(intersectedSegments);
+      drawArea.repaint();
     });
 
     frame.setVisible(true);
