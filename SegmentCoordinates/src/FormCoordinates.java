@@ -22,9 +22,9 @@ public class FormCoordinates {
     SwingUtilities.invokeLater(() -> new FormCoordinates().createAndShowGUI());
   }
 
-  private void createAndShowGUI() {
+  public void createAndShowGUI() {
     JFrame frame = new JFrame("Поиск пересечений");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperatio n(JFrame.EXIT_ON_CLOSE);
     frame.setSize(600, 700);
     frame.setLayout(null);
 
