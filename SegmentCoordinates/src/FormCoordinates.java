@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FormCoordinates {
+
   static class Segment {
     int x1, y1, x2, y2;
     Segment(int x1, int y1, int x2, int y2) {
@@ -24,7 +25,7 @@ public class FormCoordinates {
 
   public void createAndShowGUI() {
     JFrame frame = new JFrame("Поиск пересечений");
-    frame.setDefaultCloseOperatio n(JFrame.EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setSize(600, 700);
     frame.setLayout(null);
 
@@ -37,10 +38,12 @@ public class FormCoordinates {
     JTextField y1Field = new JTextField();
     JTextField x2Field = new JTextField();
     JTextField y2Field = new JTextField();
+
     frame.add(new JLabel("x") {{ setBounds(25, 22, 20, 20); }});
     frame.add(new JLabel("y") {{ setBounds(75, 22, 20, 20); }});
     frame.add(new JLabel("x") {{ setBounds(125, 22, 20, 20); }});
     frame.add(new JLabel("y") {{ setBounds(175, 22, 20, 20); }});
+
     x1Field.setBounds(10, 40, 40, 25);
     y1Field.setBounds(60, 40, 40, 25);
     x2Field.setBounds(110, 40, 40, 25);
@@ -176,10 +179,10 @@ public class FormCoordinates {
     intersectButton.addActionListener(e -> {
       StringBuilder result = new StringBuilder();
       ArrayList<Segment> intersectedSegments = new ArrayList<>();
-      tableModel.setRowCount(0); // Очищаем таблицу
+      tableModel.setRowCount(0);
 
       for (Segment s : segments) {
-        if (segmentIntersectsRect(s)) { // Проверяем пересечение
+        if (segmentIntersectsRect(s)) {
           intersectedSegments.add(s);
           result.append(String.format("(%d, %d)-(%d, %d)\n", s.x1, s.y1, s.x2, s.y2));
           tableModel.addRow(new Object[]{s.x1, s.y1, s.x2, s.y2});
